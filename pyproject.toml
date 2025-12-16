@@ -42,9 +42,16 @@ dependencies = [
 rich = ["rich>=13.9.4"]
 cli = ["typer>=0.16.0", "python-dotenv>=1.0.0"]
 ws = ["websockets>=15.0.1"]
+desktop = [
+    "pyautogui>=0.9.54",
+    "Pillow>=10.0.0",
+    "pytesseract>=0.3.10",
+    "opencv-python>=4.8.0",
+]
 
 [project.scripts]
 mcp = "mcp.cli:app [cli]"
+ubuntu-desktop-mcp = "mcp.desktop.server:main [desktop]"
 
 [tool.uv]
 default-groups = ["dev", "docs"]

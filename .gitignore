@@ -172,3 +172,22 @@ cython_debug/
 
 # claude code
 .claude/
+
+# docs
+/docs/
+/.github/
+/examples/
+/mcp/cli/
+/mcp/client/
+/mcp/os/
+/mcp/server/
+/mcp/shared/
+/mcp/__pycache__/
+/mcp/__init__.py
+/mcp/py.typed
+mcp/types.py
+/scripts
+/scripts/
+/tests/
+README.md
+
