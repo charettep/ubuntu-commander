@@ -9,13 +9,13 @@ A FastMCP server providing desktop automation tools for Ubuntu/X11:
 
 Usage:
     # Run with stdio transport (default for MCP clients)
-    python -m mcp.desktop.server
+    python -m ubuntu_desktop.server
 
     # Run with SSE transport
-    python -m mcp.desktop.server --transport sse --port 8000
+    python -m ubuntu_desktop.server --transport sse --port 8000
 
     # Run with streamable HTTP
-    python -m mcp.desktop.server --transport streamable-http --port 8000
+    python -m ubuntu_desktop.server --transport streamable-http --port 8000
 """
 
 from typing import Annotated, Literal
@@ -23,7 +23,7 @@ from typing import Annotated, Literal
 from mcp.server.fastmcp import FastMCP
 from mcp.server.fastmcp.utilities.types import Image
 
-from mcp.desktop.input import (
+from ubuntu_desktop.input import (
     get_mouse_position,
     keyboard_hotkey,
     keyboard_press,
@@ -33,7 +33,7 @@ from mcp.desktop.input import (
     mouse_move,
     mouse_scroll,
 )
-from mcp.desktop.vision import (
+from ubuntu_desktop.vision import (
     capture_screenshot,
     find_template_on_screen,
     find_text_on_screen,

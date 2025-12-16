@@ -10,9 +10,9 @@ Desktop automation MCP server for Ubuntu/X11 using FastMCP. Provides tools for s
 
 ## Run
 - StdIO (typical MCP client):
-	- `python -m mcp.desktop.server --transport stdio`
-- SSE: `python -m mcp.desktop.server --transport sse --port 8765`
-- Streamable HTTP: `python -m mcp.desktop.server --transport streamable-http --port 8765`
+	- `python -m ubuntu_desktop.server --transport stdio`
+- SSE: `python -m ubuntu_desktop.server --transport sse --port 8765`
+- Streamable HTTP: `python -m ubuntu_desktop.server --transport streamable-http --port 8765`
 
 ## Tools
 - Screenshot: `screenshot`, `screenshot_region`, `get_screen_info`
