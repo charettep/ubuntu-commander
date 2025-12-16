@@ -1,7 +1,7 @@
 """
 Input utilities for desktop automation.
 
-Provides mouse and keyboard control functions.
+Provides mouse and keyboard control functions with configurable speed.
 """
 
 from typing import Literal
@@ -10,15 +10,30 @@ import pyautogui
 
 # Configure pyautogui safety features
 pyautogui.FAILSAFE = True  # Move mouse to corner to abort
-pyautogui.PAUSE = 0.1  # Small pause between actions
+
+# Default pause - can be reduced for faster loops
+_DEFAULT_PAUSE = 0.05  # 50ms between actions (was 0.1)
+pyautogui.PAUSE = _DEFAULT_PAUSE
 
 MouseButton = Literal["left", "right", "middle"]
+
+
+def set_action_pause(pause: float):
+    """Set the pause between pyautogui actions (in seconds)."""
+    global _DEFAULT_PAUSE
+    _DEFAULT_PAUSE = pause
+    pyautogui.PAUSE = pause
+
+
+def get_action_pause() -> float:
+    """Get current pause between actions."""
+    return pyautogui.PAUSE
 
 
 def mouse_move(
     x: int,
     y: int,
-    duration: float = 0.5,
+    duration: float = 0.0,
     relative: bool = False,
 ) -> tuple[int, int]:
     """
@@ -27,7 +42,7 @@ def mouse_move(
     Args:
         x: X coordinate (absolute or relative)
         y: Y coordinate (absolute or relative)
-        duration: Time in seconds for the movement
+        duration: Time in seconds for the movement (0=instant)
         relative: If True, move relative to current position
 
     Returns:
@@ -38,6 +53,12 @@ def mouse_move(
     else:
         pyautogui.moveTo(x, y, duration=duration)
 
+    return pyautogui.position()
+
+
+def instant_move(x: int, y: int) -> tuple[int, int]:
+    """Move mouse instantly to coordinates (no duration, no tween)."""
+    pyautogui.moveTo(x, y, duration=0, _pause=False)
     return pyautogui.position()
 
 
@@ -180,3 +201,65 @@ def keyboard_hotkey(*keys: str) -> list[str]:
 def get_mouse_position() -> tuple[int, int]:
     """Return current mouse position as (x, y)."""
     return pyautogui.position()
+
+
+def fast_click(
+    x: int,
+    y: int,
+    button: MouseButton = "left",
+    clicks: int = 1,
+) -> tuple[int, int]:
+    """
+    Move and click in one fast operation with minimal delays.
+    
+    Args:
+        x: X coordinate
+        y: Y coordinate  
+        button: Mouse button
+        clicks: Number of clicks
+    
+    Returns:
+        Click position (x, y)
+    """
+    # Use _pause=False for the move to avoid extra delay
+    pyautogui.moveTo(x, y, duration=0, _pause=False)
+    pyautogui.click(clicks=clicks, interval=0.02, button=button)
+    return (x, y)
+
+
+def move_and_click(
+    x: int,
+    y: int,
+    button: MouseButton = "left",
+    clicks: int = 1,
+    move_duration: float = 0.0,
+    click_interval: float = 0.05,
+) -> dict:
+    """
+    Combined move and click with configurable timing.
+    
+    Args:
+        x: Target X coordinate
+        y: Target Y coordinate
+        button: Mouse button
+        clicks: Number of clicks
+        move_duration: Duration for mouse movement (0=instant)
+        click_interval: Interval between multiple clicks
+        
+    Returns:
+        Dict with final position and action details
+    """
+    if move_duration > 0:
+        pyautogui.moveTo(x, y, duration=move_duration)
+    else:
+        pyautogui.moveTo(x, y, duration=0, _pause=False)
+    
+    pyautogui.click(clicks=clicks, interval=click_interval, button=button)
+    
+    final_pos = pyautogui.position()
+    return {
+        "x": final_pos[0],
+        "y": final_pos[1],
+        "button": button,
+        "clicks": clicks,
+    }

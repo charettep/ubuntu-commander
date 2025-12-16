@@ -1,0 +1,27 @@
+[build-system]
+requires = ["hatchling>=1.22"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ubuntu-commander"
+version = "0.1.0"
+description = "Ubuntu/X11 desktop automation MCP server"
+readme = "src/servers/README.md"
+authors = [{ name = "ubuntu-commander" }]
+license = { text = "MIT" }
+requires-python = ">=3.10"
+dependencies = [
+  "mcp[fastmcp]",
+  "pyautogui",
+  "pillow",
+  "pytesseract",
+]
+
+[project.scripts]
+ubuntu-commander = "servers.server:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/servers"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src/servers"]
